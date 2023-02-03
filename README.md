@@ -8,7 +8,7 @@ http://localhost:8080/api/list - база с возможностью вноси
 
 http://localhost:8080/api/addContact?type=person&name=Adam&surname=Sendler&birth=1988.01.21&gender=M&number=+375(13)23-32-43
 
-Удаление по индексу:
+Удаление по индексу: 
 http://localhost:8080/api/delContact?id=1
 
 Список контактов:
