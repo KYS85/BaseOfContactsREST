@@ -23,7 +23,7 @@ public class ContactManager implements Serializable, ContactsInterface {
 
     public void ManageContacts() throws IOException, ClassNotFoundException { // Contact manager
         String path = "src/main/resources/contactBookJ.data";
-        /*
+/*
         Contact contact;
         ContactList cl = new ContactList();
         List<Contact> contactsList = cl.contactList;  // assign to list deserialized list

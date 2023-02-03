@@ -46,7 +46,7 @@ public class ContentHandler implements HttpHandler {
         }
 
         String fileName = "listening.png"; // "Anime.jpg"; //
-        String pathToFile = "/Users/spesu/Java/HTML/";// "/Users/spesu/IdeaProjects/ContactsREST/src/main/java/project/";
+        String pathToFile = "src/main/resources/";// "/Users/spesu/IdeaProjects/ContactsREST/src/main/java/project/";
 
         if ("/content/anime".equals(requestURI)) {
             fileName =  "Anime.jpg"; //

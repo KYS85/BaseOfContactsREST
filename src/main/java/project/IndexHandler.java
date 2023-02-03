@@ -17,7 +17,7 @@ public class IndexHandler implements HttpHandler {
     public void handle(HttpExchange exchange) throws IOException {
 
         String fileName = "redDel1.jpg"; //"Anime.jpg"; //"listening.png"; //
-        String pathToFile = "/Users/spesu/Java/HTML/";// "/Users/spesu/IdeaProjects/ContactsREST/src/main/java/project/";
+        String pathToFile = "src/main/resources/"; //"/Users/spesu/Java/HTML/";// "/Users/spesu/IdeaProjects/ContactsREST/src/main/java/project/";
 
         exchange.getResponseHeaders().set("Content-Type", "image/jpeg");
         long bytes = Files.size(Path.of(pathToFile + fileName));
