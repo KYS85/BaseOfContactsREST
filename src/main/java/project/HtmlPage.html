@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> MainPage </title>
+</head>
+<body>
+<script>
+    // заменим цвет фона на , ...
+    document.body.style.background = "pink";
+    function prList() {
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "http://localhost:8080/content/json");
+                xhr.responseType = 'json';
+                xhr.send();
+                var text = " ";
+                xhr.onload = () => {
+                    if (xhr.status == 200) {
+                        console.log("Server response: ", xhr.statusText );
+                    } else {
+                        console.log("Server response: "+ xhr.statusText);
+                    }
+                    var logDiv = document.getElementById("Log");
+                    for (let l = 0; l < xhr.response.length; l++) {
+                                    text = text.concat(xhr.response[l] + '   ')
+                                    .concat("<img src='http://localhost:8080/index', alt = 'delete' onclick='deleteContact("+(l+1)+")'>")
+                                    .concat("<br/>")
+                                }
+                    logDiv.innerHTML = text;
+                    console.log("Console response-->: ", xhr.response);
+                };
+            }
+
+</script>
+<h2> Привет МИР_!!! </h2>
+<strong> <i> Контакты: </i> </strong>
+<br/>
+
+<input type="button" id="buttonDel" value="Delete first contact">
+<script>
+          buttonDel.onclick = function() {
+
+                var xhr = new XMLHttpRequest();
+                    xhr.open("GET", "http://localhost:8080/api/delContact?id="+1);
+                    xhr.send();
+              //alert('Deleted!');
+
+                prList();
+                    //alert(location.href); // показывает текущий URL
+                    //if (confirm("Перейти на Wikipedia?")) {
+                    //    location.href = "https://wikipedia.org"; // перенаправляет браузер на другой URL
+                    //}
+              };
+
+
+</script>
+
+<input type="button" id="buttonAdd1" value="Add person contact">
+<script>
+          buttonAdd1.onclick = function() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "http://localhost:8080/api/addContact?type=person&name=Adam&surname=Sendler&birth=1988.01.21&gender=M&number=+375(13)23-32-43");
+            xhr.send();
+
+            prList();
+          };
+
+</script>
+<input type="button" id="buttonAdd2" value="Add org contact">
+<script>
+          buttonAdd2.onclick = function() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "http://localhost:8080/api/addContact?type=org&name=JUST&orgAddress=thAddres&number=11111111");
+            xhr.send();
+
+            prList();
+          };
+
+</script>
+
+<br/>
+<i> Enter Personal Contact name and surname </i>
+
+<form name="nameForm">
+    <input type='text' name='nameForm_inp'>
+    <input type='text' name='surnameForm_inp'>
+    <br/> <i>Enter number </i> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+    <input type='text' name='numberForm_inp'>
+    <br/> <i> Enter birth date </i> &nbsp &nbsp &nbsp &nbsp &nbsp <input type='text' name='birthForm_inp'>
+    <br/> <i> Enter gender (M/F) </i> &nbsp &nbsp <input type='text' name='genderForm_inp'>
+    <button type='submit' name="nameForm_btn"> Accept</button>
+</form>
+<script>
+
+        document.forms.nameForm.onsubmit = (e) => {
+            e.preventDefault();
+            var userInput = document.nameForm.nameForm_inp.value;
+            var userInputSurname = document.nameForm.surnameForm_inp.value;
+            var userInputNumber = document.nameForm.numberForm_inp.value;
+            var userInputBirth = document.nameForm.birthForm_inp.value;
+            var userInputGender = document.nameForm.genderForm_inp.value;
+            //userInput = encodeURIComponent(userInput);
+
+            var xhr = new XMLHttpRequest();
+                xhr.open("POST", 'http://localhost:8080/api/addContact?type=person&' );
+                xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+                xhr.send('name=' + userInput + '&surname=' + userInputSurname +
+                '&number=' + userInputNumber + '&birth=' + userInputBirth + '&gender=' + userInputGender);
+            prList();
+        };
+
+</script>
+<br/>
+<button type="button" onclick="changeG()"> Delete by№</button>
+<button type="button" onclick="changeOrg()"> Create Organization Contact</button>
+<button type="button" onclick="editCont()"> ?????</button>
+
+<div id="myAnchor4"></div>
+<div id="myAnchor5"></div>
+
+<div id="formEdit"></div>
+<br/>
+<i> Enter contact № to get details </i>
+<form name="ourForm">
+    <input type='text' name='ourForm_inp'>
+    <button type='submit' name="ourForm_btn"> OK</button>
+</form>
+
+<div id="myAnchor2"></div>
+<div id="myAnchor3"></div>
+
+<script>
+   var flag1 = 2;
+   function changeG() {
+        if (flag1 % 2 == 0) {
+            flag1 = flag1 + 1;
+          document.getElementById('myAnchor2').innerHTML=" <i> Enter № to delete </i> ";
+          document.getElementById('myAnchor3').innerHTML=" <input id='elem1' type='text' name='ourForm_inp'> "+
+          " <button type='button' onclick='actionInto()' name = 'btnA' > Delete </button> ";
+          console.log('flag1 1 = ' + flag1);
+        } else {
+            flag1 = flag1 + 1;
+            document.getElementById('myAnchor2').innerHTML="";
+          document.getElementById('myAnchor3').innerHTML="";
+          console.log('flag1 2 = ' + flag1);
+        }
+    }
+    function actionInto() {
+        var val = document.getElementById('elem1').value;
+        console.log('Hello from script = ' + val);
+            deleteContact(val);
+    }
+
+    function changeOrg() {
+        if (flag % 2 == 0) {
+            flag = flag + 1;
+          document.getElementById('myAnchor4').innerHTML=" <i> Enter Organization name and address </i> ";
+          document.getElementById('myAnchor5').innerHTML=" <input id='elem2' type='text' name='orgForm_inp'> "+
+          " <input id='elem3' type='text' name='orgForm_inp'> "+
+          " <br/><i>  Enter number  </i> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp " +
+          " <input id='elem4' type='text' name='orgForm_inp'> "+
+          " <button type='button' onclick='actionOrg()' name = 'btnB' > Add </button> ";
+          console.log('flag 1 = ' + flag);
+        } else {
+            flag = flag + 1;
+            document.getElementById('myAnchor4').innerHTML="";
+          document.getElementById('myAnchor5').innerHTML="";
+          console.log('flag 2 = ' + flag);
+        }
+    }
+    function actionOrg() {
+        var val1 = document.getElementById('elem2').value;
+        var val2 = document.getElementById('elem3').value;
+        var val3 = document.getElementById('elem4').value;
+        console.log('Hello from script = ' + val1 + ' ' + val2 + ' ' + val3);
+
+    var xhr = new XMLHttpRequest();
+                xhr.open("POST", 'http://localhost:8080/api/addContact?type=org&' );
+                xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+                xhr.send('name=' + val1 + '&orgAddress=' + val2 +
+                '&number=' + val3);
+            prList();
+
+    }
+
+</script>
+
+
+<div id="myAnchor6"></div>
+<div id="myAnchor7"></div>
+
+
+<br/>
+<div id="Log"></div>
+<script>
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "http://localhost:8080/content/json");
+            xhr.responseType = 'json';
+            xhr.send();
+            var text = " ";
+            xhr.onload = () => {
+                if (xhr.status == 200) {
+                    console.log("Server response: ", xhr.statusText );
+                } else {
+                    console.log("Server response: "+ xhr.statusText);
+                }
+                var logDiv = document.getElementById("Log");
+                for (let l = 0; l < xhr.response.length; l++) {
+                let x = l + 1;
+                text = text.concat(xhr.response[l] + '   ')
+                .concat("<img src='http://localhost:8080/index', alt = 'delete' onclick='deleteContact("+(l+1)+")'>")
+                //.concat(" <a href='http://localhost:8080/api/delContact?id="+(l+1)+"'>  <img src='http://localhost:8080/index', alt = 'delete'> </a> ")
+                //.concat(" <img src='http://localhost:8080/index', alt = 'delete'> ")
+                //.concat(" <a href='http://localhost:8080/api/delContact?id="+(l+1)+"'> delete "+(l+1)+" </a> ")
+                //.concat("<input type='button' id='delButton' value='Delete "+(l+1)+" contact'>")
+                .concat("<br/>")
+                //document.body.style.background = "gold";
+                }
+                logDiv.innerHTML = text;
+                console.log("Console response-->: ", xhr.response);
+            };
+            console.log("Server response-->: ", xhr.status);
+
+            function deleteContact(x) {
+                if (confirm("Хотите УДАЛИТЬ контакт № "+x+" ?")) {
+                            var xhr = new XMLHttpRequest();
+                    var url = "http://localhost:8080/api/delContact?";
+                        xhr.open("GET", 'http://localhost:8080/api/delContact?' + 'id=' + x);
+                        xhr.send();
+
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("GET", "http://localhost:8080/content/json");
+                    xhr.responseType = 'json';
+                    xhr.send();
+                    var text = " ";
+                    xhr.onload = () => {
+                        if (xhr.status == 200) {
+                            console.log("Server response: ", xhr.statusText );
+                        } else {
+                            console.log("Server response: "+ xhr.statusText);
+                        }
+                        var logDiv = document.getElementById("Log");
+                            for (let l = 0; l < xhr.response.length; l++) {
+                                let y = l + 1;
+                                text = text.concat(xhr.response[l] + '   ')
+                                //.concat(" <a href='http://localhost:8080/api/delContact?id="+(l+1)+"'>  <img src='http://localhost:8080/index', alt = 'delete'> </a> ")
+                                .concat("<img src='http://localhost:8080/index', alt = 'delete' onclick='deleteContact("+(l+1)+")'>")
+                                .concat("<br/>")
+                            }
+                        logDiv.innerHTML = text;
+                    };
+                }
+            }
+
+
+</script>
+
+<p> JSON is here: <a href="http://localhost:8080/content/json"> json </a></p>
+
+
+<div id="response"></div>
+<br/>
+<div id="response1"></div>
+<br/>
+
+<script>
+        var flagED = 2;
+            function editCont() {
+            if (flagED % 2 == 0) {
+            flagED = flagED + 1;
+            console.log("Hi! Change!")
+                            var editForm = document.getElementById("formEdit");
+                            editForm.innerHTML = " <i> ??????? </i>"
+
+
+            } else {
+                flagED = flagED + 1;
+                var editForm = document.getElementById("formEdit");
+                editForm.innerHTML = "";
+            }
+        }
+            document.forms.ourForm.onsubmit = (e) => {
+
+            e.preventDefault();
+            var userInput = document.forms.ourForm.ourForm_inp.value;
+            userInput = encodeURIComponent(userInput);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", 'http://localhost:8080/api/getContact/' + userInput);
+            xhr.responseType = 'text';
+            xhr.send();
+
+            var text = "  ";
+            xhr.onload = () => {
+                        var infoResp1 = document.getElementById("response1");
+                        infoResp1.innerHTML = " <b>Редактировать контакт:</b></br><i> Type and confirm info </i>" +
+                        "<input id='inpEditName' type='text'  name='inpName'>" +
+                        "<button type='button' onclick = 'editName()' > Edit Name </button><br/> " +
+                        "<input id='inpEditSurameAddr' type='text'  name='inpSurnameAddr'>" +
+                        "<button type='button' onclick = 'editSurnameOrAddr()' > Edit Surname(or Address for Org) </button> <br/>"+
+                        "<input id='inpEditNumber' type='text'  name='inpNumber'>" +
+                        "<button type='button' onclick = 'editNumber()' > Edit Number </button> <br/>" +
+                        "<input id='inpEditGender' type='text'  name='inpGender'>" +
+                        "<button type='button' onclick = 'editGender()' > Edit Gender </button> <br/>" +
+                        "<input id='inpEditBirth' type='text'  name='inpBirth'>" +
+                        "<button type='button' onclick = 'editBirth()' > Edit Birth </button> <br/>";
+
+    var valEd = document.getElementById('inpEditName').value;
+    var valEdSurAddr = document.getElementById('inpEditSurameAddr').value;
+    console.log('inpName = ' + valEd + 'valEdSurAddr =' + valEdSurAddr);
+                        if (xhr.status == 200) {
+                            console.log("Server response: ", xhr.statusText );
+                        } else {
+                            console.log("Server response: "+ xhr.statusText);
+                        }
+                        var text = xhr.response;
+                        console.log('userInput: ' + userInput)
+                        console.log('response: ' + xhr.response)
+                        var infoDiv = document.getElementById("response");
+                        infoDiv.innerHTML = text.concat(
+                        "<a href = 'http://localhost:8080/api/edit?id="+(userInput)+"&name="+(valEd)+""+
+                        "' target='_blank'>link to edit contact in API </a> <br/>");
+                    };
+
+        };
+            function editName() {
+            var idx = document.forms.ourForm.ourForm_inp.value;
+            valEd = document.getElementById('inpEditName').value;
+            console.log('inpName = ' + valEd);
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", 'http://localhost:8080/api/edit?id='+idx+'&name='+valEd);
+            xhr.responseType = 'text';
+            xhr.send();
+            prList();
+            }
+
+            function editSurnameOrAddr() {
+            var idx = document.forms.ourForm.ourForm_inp.value;
+            valEdSurAddr = document.getElementById('inpEditSurameAddr').value;
+            console.log('inpNameSurAddr = ' + valEdSurAddr);
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", 'http://localhost:8080/api/edit?id='+idx+'&surname='+valEdSurAddr);
+            xhr.responseType = 'text';
+            xhr.send();
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", 'http://localhost:8080/api/edit?id='+idx+'&orgAddress='+valEdSurAddr);
+            xhr.responseType = 'text';
+            xhr.send();
+            prList();
+            }
+
+            function editNumber() {
+            var idx = document.forms.ourForm.ourForm_inp.value;
+            valNumber = document.getElementById('inpEditNumber').value;
+            console.log('inpNumber = ' + valNumber);
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", 'http://localhost:8080/api/edit?id='+idx+'&number='+valNumber);
+            xhr.responseType = 'text';
+            xhr.send();
+            prList();
+            }
+
+            function editGender() {
+            var idx = document.forms.ourForm.ourForm_inp.value;
+            valGender = document.getElementById('inpEditGender').value;
+            console.log('inpGender= ' + valGender);
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", 'http://localhost:8080/api/edit?id='+idx+'&gender='+valGender);
+            xhr.responseType = 'text';
+            xhr.send();
+            prList();
+            }
+
+            function editBirth() {
+            var idx = document.forms.ourForm.ourForm_inp.value;
+            valBirth = document.getElementById('inpEditBirth').value;
+            console.log('valBirth = ' + valBirth);
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", 'http://localhost:8080/api/edit?id='+idx+'&birth='+valBirth);
+            xhr.responseType = 'text';
+            xhr.send();
+            prList();
+            }
+
+                function changeLink() {
+                    document.getElementById('myAnchor').innerHTML="Новая полезная ссылка";
+                    document.getElementById('myAnchor').href="http://www.puzzleweb.ru";
+                    document.getElementById('myAnchor').target="_blank";
+                }
+
+</script>
+
+<p><a id="myAnchor" href="#">Ссылка</a>
+    <button type="button" onclick="changeLink()">Изменить ссылку</button>
+<p>
+
+    <button type="button" onclick="changeL()">картинка</button>
+    <img id="myAnchor1"></img>
+    <script>
+    var flag = 2;
+    function changeL() {
+    if (flag % 2 == 0) {
+    flag = flag + 1;
+    //document.getElementById('myAnchor1').innerHTML="Новая полезная ссылка";
+    //document.getElementById('myAnchor1').href="http://www.puzzleweb.ru";
+    //document.getElementById('myAnchor1').target="_blank";
+    document.getElementById('myAnchor1').src="/content/anime", alt = 'request from server';
+
+    } else {
+        flag = flag + 1;
+        document.getElementById('myAnchor1').src="", alt = 'request from server';
+        }
+    }
+
+    </script>
+
+    <br/>
+    <script>
+
+    </script>
+
+    <img src="/content/response" , alt='request from server'>
+</body>
+</html>
+
